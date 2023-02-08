@@ -1,30 +1,12 @@
-const form = document.getElementById('informationForm');
+const handlePhone = (event) => {
+  let input = event.target
+  input.value = phoneMask(input.value)
+}
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const personName = document.getElementById('name').value;
-  const personNumber = document.getElementById('number').value;
-  console.log(personName + ' ' + personNumber);
-
-  fetch('https://data.mongodb-api.com/app/data-pnruw/endpoint/save', {
-    method: 'POST',
-    headers: { 
-      'X-API-KEY': 'vuNJ8T3zxvGDRdxjEOH0WJBTgXGgi55tHsAKGQ8hNhvr1W4LFnO8smhcbdfW8EjF',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      "dataSource": "comments",
-      "database": "leads",
-      "collection": "users",
-      "document": {
-        "name": personName,
-        "number": personNumber
-      }
-    })
-  }).then(response => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch(error => console.error(error));
-});
+const phoneMask = (value) => {
+  if (!value) return ""
+  value = value.replace(/\D/g,'')
+  value = value.replace(/(\d{2})(\d)/,"($1) $2")
+  value = value.replace(/(\d)(\d{4})$/,"$1-$2")
+  return value
+}
